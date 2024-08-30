@@ -2,7 +2,6 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useDropzone } from "react-dropzone";
-import { motion } from "framer-motion";
 import "./image.css"; // Import your CSS file
 
 const ImageUploader = () => {
@@ -69,33 +68,23 @@ const ImageUploader = () => {
 
       {originalImageUrl && (
         <div className="image-comparison">
-          <motion.div
-            className="image-original"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5 }}
-          >
+          <div className="image-original">
             <h3>Original Image</h3>
             <img
               src={originalImageUrl}
               alt="Original"
               className="image-preview"
             />
-          </motion.div>
+          </div>
           {isProcessing ? (
-            <motion.div
-              className="image-processed"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.5 }}
-            >
+            <div className="image-processed">
               <h3>Processed Image</h3>
               {imageUrl ? (
                 <img src={imageUrl} alt="Processed" className="image-preview" />
               ) : (
                 <p>No processed image yet</p>
               )}
-            </motion.div>
+            </div>
           ) : (
             <p className="instructions">
               Click "Remove Background" to process the image

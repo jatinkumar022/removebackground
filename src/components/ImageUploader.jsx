@@ -39,8 +39,8 @@ const ImageUploader = () => {
         formData,
         {
           headers: {
-            "Content-Type": "multipart/form-data",
-            "X-Api-Key": "veJJ8urPBz66yw9aHZGoWoYU", // Replace with your API key
+            // "Content-Type": "multipart/form-data",
+             // Replace with your API key
           },
           responseType: "blob", // Expecting image blob response
         }

@@ -12,15 +12,17 @@ const ImageUploader = () => {
   const [error, setError] = useState(null);
   const [isProcessing, setIsProcessing] = useState(false);
 
+  const handleDrop = (acceptedFiles) => {
+    const uploadedFile = acceptedFiles[0];
+    setFile(uploadedFile);
+    setOriginalImageUrl(URL.createObjectURL(uploadedFile));
+    setImageUrl(null);
+    setIsProcessing(false);
+  };
+
   const { getRootProps, getInputProps } = useDropzone({
     accept: "image/*",
-    onDrop: (acceptedFiles) => {
-      const uploadedFile = acceptedFiles[0];
-      setFile(uploadedFile);
-      setOriginalImageUrl(URL.createObjectURL(uploadedFile));
-      setImageUrl(null); // Clear previous processed image
-      setIsProcessing(false); // Reset processing state
-    },
+    onDrop: handleDrop,
   });
 
   const removeBackground = async () => {
@@ -39,21 +41,21 @@ const ImageUploader = () => {
         formData,
         {
           headers: {
-            // "Content-Type": "multipart/form-data",
-             // Replace with your API key
+            "Content-Type": "multipart/form-data",
+            // Replace with your API key
+            "X-Api-Key": "YMXgeRV9Ci4p17iamTDauxxa",
           },
-          responseType: "blob", // Expecting image blob response
+          responseType: "blob",
         }
       );
 
       const imageBlob = new Blob([response.data], { type: "image/png" });
-      const imageUrl = URL.createObjectURL(imageBlob);
-      setImageUrl(imageUrl);
+      const newImageUrl = URL.createObjectURL(imageBlob);
+      setImageUrl(newImageUrl);
       setIsProcessing(true);
     } catch (err) {
       console.error("Error removing background:", err);
       setError("Error removing background. Please try again.");
-      setIsProcessing(false);
     } finally {
       setLoading(false);
     }
@@ -70,11 +72,7 @@ const ImageUploader = () => {
         <div className="image-comparison">
           <div className="image-original">
             <h3>Original Image</h3>
-            <img
-              src={originalImageUrl}
-              alt="Original"
-              className="image-preview"
-            />
+            <img src={originalImageUrl} alt="Original" className="image-preview" />
           </div>
           {isProcessing ? (
             <div className="image-processed">
@@ -86,9 +84,7 @@ const ImageUploader = () => {
               )}
             </div>
           ) : (
-            <p className="instructions">
-              Click "Remove Background" to process the image
-            </p>
+            <p className="instructions">Click "Remove Background" to process the image</p>
           )}
         </div>
       )}
